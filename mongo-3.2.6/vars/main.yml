@@ -1,0 +1,9 @@
+---
+# vars file for mongo-3.2.6
+
+log_path: /var/log/mongodb/mongoddb.log
+dbpath: /mongodb
+port: 27018
+bindIp: 0.0.0.0
+fork: "fork: true"
+replication: "OpsTree-mongo-rs"	

@@ -1,0 +1,52 @@
+---
+# tasks file for mongo-3.2.6
+# Add mongo-3.2.6 key
+- apt_key:
+    keyserver: 'hkp://keyserver.ubuntu.com:80'
+    id: EA312927
+
+# Add specified repository into sources list using specified filename.
+- apt_repository:
+    repo: deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse
+    state: present
+    filename: 'mongodb-org-3.2'
+
+# Update the repo-list
+- name: Update the repository cache and update package "mongodb" to latest version.
+  apt:
+    update_cache: yes
+
+# Install the mongodb packages
+- name: install mongodb packages
+  apt: name={{item}} state=present update_cache=yes
+  with_items:
+    - mongodb-org=3.2.6
+    - mongodb-org-server=3.2.6
+    - mongodb-org-shell=3.2.6
+    - mongodb-org-mongos=3.2.6
+    - mongodb-org-tools=3.2.6
+
+# creates mongo data directory
+- name: Creates directory
+  file:
+    path: "{{dbpath}}"
+    state: directory
+    owner: mongodb
+    group: mongodb
+    mode: 0775
+    recurse: yes
+
+# copy mongodb conf file
+- template:
+    src: mongodb.conf.j2
+    dest: /etc/mongod.conf
+    owner: mongodb
+    group: mongodb
+ 
+# Restart the service 
+- name: Restart the mongodb
+  service: name=mongod state=restarted
+
+# Add Primary
+- name: Execute the rs.initiate on Primary
+  shell: mongo --port "{{port}}" --eval "rs.initiate()" 

@@ -1,0 +1,6 @@
+---
+# defaults file for mongo-3.2.6
+# path: /var/log/mongodb/mongoddb.log
+#key_url: https://www.mongodb.org/static/pgp/server-3.2.asc?_ga=2.21290427.1686384428.1500379424-2125504499.1500379424
+key_url: hkp://keyserver.ubuntu.com:80
+
